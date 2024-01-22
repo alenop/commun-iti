@@ -5,9 +5,11 @@ import { RoomService } from "@/modules/room/services/RoomService";
 import { RoomStore } from "@/modules/room/store";
 import { Plus, Search } from "@element-plus/icons-vue";
 import { onMounted } from "vue";
+import roommodal from "@/app/components/domain/room/RoomCreationModal.vue";
 
 const state = useState(RoomStore);
 const [roomService] = useProvider([RoomService]);
+
 
 onMounted(() => {
   if (state.rooms.length === 0) {
@@ -23,8 +25,10 @@ onMounted(() => {
     <div class="room-menu-main">
       <div class="room-menu-name">{{ state.currentRoom?.name }}</div>
       <div class="room-menu-actions">
-        <el-button :icon="Plus" size="default" circle />
-        <el-button :icon="Search" size="default" circle  />
+        <el-button @click="$refs.modal.show()" :icon="Plus" size="default" circle />
+        <el-button @click="$refs.modal.show()" :icon="Search" size="default" circle  />
+<roommodal ref="modal"></roommodal>
+<room-search-modal ref="modal2"></room-search-modal>
       </div>
     </div>
 

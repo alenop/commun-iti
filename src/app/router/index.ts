@@ -52,8 +52,9 @@ const router = createRouter({
       component: AppLayout,
       beforeEnter: (to, from) => {
         const authState = useState(AuthenticationStore);
-
+       
         if (!authState.loggedUser) {
+          
           return { path: "/login", query: { redirectPath: to.path }, hash: to.hash };
         }
 

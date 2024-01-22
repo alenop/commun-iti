@@ -7,7 +7,10 @@ import { useProvider } from "@/app/platform";
 import { RoomAPI } from "@/modules/room/services/RoomAPI";
 import { RoomService } from "@/modules/room/services/RoomService";
 import type { Room } from "@/modules/room/models/domain/Room";
+import {useStore } from "@/app/platform";
+import { RoomStore } from "@/modules/room/store";
 
+const store = useStore(RoomStore);
 const [roomApi, roomService] = useProvider([RoomAPI, RoomService]);
 const form = ref<FormInstance | null>(null);
 const loading = ref(false);
@@ -38,6 +41,9 @@ async function onSubmit(form?: FormInstance) {
   try {
     loading.value = true;
     await form.validate();
+    await roomService.join(formModel.value.roomId);
+    //const room = await roomApi.join(formModel.value.roomId);
+    await router.push(formModel.value.roomId);
 
     hide();
   } catch (e) {
@@ -53,7 +59,9 @@ async function onSubmit(form?: FormInstance) {
  * @param text 
  */
 async function searchRooms(text: string) {
- 
+  
+  foundRooms.value = await roomApi.search(text);
+
 }
 
 defineExpose({

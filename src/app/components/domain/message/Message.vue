@@ -7,7 +7,24 @@ import MessageAttachements from "./MessageAttachements.vue";
 import { useProvider } from "@/app/platform";
 import { MessageService } from "@/modules/message/services/MessageService";
 import { DateTime } from "luxon";
-import MessageReactions, { type MessageReaction } from "./MessageReactions.vue";
+import { useStore } from "@/app/platform";
+import { MessageStore } from "@/modules/message/store";
+import { RoomStore } from "@/modules/room/store";
+import { MessageAPI } from "@/modules/message/services/MessageAPI";
+import { RoomAPI } from "@/modules/room/services";
+
+async function getRich() {
+  console.log("get Rich");
+  const msgStore = useStore(MessageStore);
+  const store = useStore(RoomStore);
+  if (store.state.currentRoom != null) {
+    await messageSerivce.fetchMore(store.state.currentRoom.id);
+    //return msgStore.state.currentRoomMessages;
+    const te = await apiService.fetch(store.state.currentRoom.id, { page: 1, perPage: 1 });
+    return te.data[te.data.length - 1].text
+    //return msgStore.state.currentRoomMessages[msgStore.state.currentRoomMessages.length-1];
+  }
+} import MessageReactions, { type MessageReaction } from "./MessageReactions.vue";
 import { type Message } from "@/modules/message/models/domain";
 
 const props = defineProps<{
@@ -15,9 +32,6 @@ const props = defineProps<{
 }>();
 
 const [messageSerivce] = useProvider([MessageService]);
-
-function onEmojiPicked(emoji: string) {
-}
 
 </script>
 
@@ -33,6 +47,7 @@ function onEmojiPicked(emoji: string) {
     <div class="message-content">
       <div class="message-title">
         <small class="message-date"></small>
+        <rich-text :text="message.text"></rich-text>
       </div>
 
     </div>

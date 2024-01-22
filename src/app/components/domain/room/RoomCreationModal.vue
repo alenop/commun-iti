@@ -13,16 +13,28 @@ const form = ref<FormInstance | null>(null);
 const loading = ref(false);
 const router = useRouter();
 
+const userNameRegex = /^(\w+)$/i;
+
 const formRules = reactive<FormRules>({
-  
+  name:[
+  {
+      required: true,
+      message: "name obligatoire",
+      pattern:userNameRegex,
+      trigger:"blur"
+    }
+  ]
 });
 
-const { isVisible, hide, show, formModel } = useFormModal(
+const { isVisible, formModel, show,hide } = useFormModal(
   {
     name: ""
   },
   form
 );
+function test(){
+  console.log("eren");
+}
 
 async function onSubmit(form?: FormInstance) {
   if (!form) {
@@ -32,7 +44,11 @@ async function onSubmit(form?: FormInstance) {
   try {
     loading.value = true;
     await form.validate();
-
+    if(await roomApi.exists(formModel.value.name)){
+      throw new Error("room already exists x(")
+    }
+    roomService.create({name:formModel.value.name});
+    hide();
     
   } catch (e) {
     return;
@@ -43,7 +59,8 @@ async function onSubmit(form?: FormInstance) {
 
 defineExpose({
   show,
-  hide
+  hide,
+  test
 });
 </script>
 
@@ -58,7 +75,7 @@ defineExpose({
       @submit.prevent="onSubmit(form!)"
     >
       <el-form-item label="Nom du salon" prop="name">
-     
+        <el-input v-model="formModel.name" />
       </el-form-item>
     </el-form>
 

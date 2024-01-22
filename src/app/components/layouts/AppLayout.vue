@@ -2,6 +2,7 @@
 import LeftMenu from "@/app/components/domain/menu/LeftMenu.vue";
 import RightMenu from "@/app/components/domain/menu/RightMenu.vue";
 import MessageInput from "@/app/components/domain/message/MessageInput.vue";
+
 import { useProvider, useState } from "@/app/platform";
 import { AuthenticationStore } from "@/modules/authentication/store/AuthenticationStore";
 import { WebsocketConnection } from "@/modules/infrastructure/socket";
@@ -23,6 +24,7 @@ if (authState.token?.bearer) {
 
     <main>
       <main>
+        <router-view></router-view>
         <!-- TODO -->
       </main>
 
@@ -40,22 +42,22 @@ if (authState.token?.bearer) {
 .app-layout {
   display: flex;
 
-  > aside {
+  >aside {
     width: var.$layout-left-menu-width;
     height: 100%;
     background-color: var.$color-primary-darker;
   }
 
-  > main {
+  >main {
     flex: 1;
     display: flex;
     flex-direction: column;
 
-    > main {
+    >main {
       flex: 1;
     }
 
-    > footer {
+    >footer {
       height: var.$layout-footer-height;
     }
   }

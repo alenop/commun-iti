@@ -22,11 +22,22 @@ const registerFormRules = reactive<FormRules>({
   username: [
     {
       required: true,
-      message: "Pseudo obligatoire"
+      message: "Pseudo obligatoire",
+      pattern:userNameRegex,
+      trigger:"blur"
     }
   ],
-  password: [],
-  passwordConfirmation: []
+  password: [{
+      required: true,
+      message: "Mdp obligatoire",
+      trigger:"blur"
+      
+    }],
+  passwordConfirmation: [{
+      required: true,
+      message: "Mdp confirm obligatoire",
+      trigger:"blur"
+    }]
 });
 
 async function onSubmit(form?: FormInstance) {
@@ -36,6 +47,16 @@ async function onSubmit(form?: FormInstance) {
 
   try {
     await form.validate();
+    if(registerModel.password != registerModel.passwordConfirmation){
+      ElMessage("failed you noted the wrong password in the second in the second input");
+      throw new Error("failed bourrin");
+    }
+    if(await userApi.exists(registerModel.username)){
+      ElMessage("failed you already exists");
+      throw new Error("failed you already exists");
+    }
+    await userApi.register(registerModel);
+    router.push("/login");
   } catch (e) {
     return;
   }
@@ -59,9 +80,12 @@ async function onSubmit(form?: FormInstance) {
             <el-input v-model="registerModel.username" />
           </el-form-item>
 
-          <el-form-item label="Mot de passe" prop="password"> </el-form-item>
+          <el-form-item label="Mot de passe" prop="password">
+            <el-input v-model="registerModel.password" type="password"/>
+             </el-form-item>
 
           <el-form-item label="Confirmez votre mot de passe" prop="passwordConfirmation">
+            <el-input v-model="registerModel.passwordConfirmation" type="password" />
           </el-form-item>
 
           <el-form-item>

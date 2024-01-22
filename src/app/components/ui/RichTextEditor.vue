@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import * as Quill from "quill";
+import  Quill from "quill";
 import { ref, onMounted } from "vue";
 import type { DeltaOperation } from "quill";
 import type { RichText, RichTextToken } from "@/modules/message/models/domain";
