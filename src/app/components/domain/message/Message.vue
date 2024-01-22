@@ -31,7 +31,13 @@ async function getRich() {
 const props = defineProps<{
   message: Message;
 }>();
-
+function getDate() {
+  return new Date().toLocaleDateString('fr-FR', {
+    year: 'numeric',
+    month: 'long',
+    day: '2-digit',
+  });
+}
 const [messageSerivce] = useProvider([MessageService]);
 
 </script>
@@ -43,11 +49,11 @@ const [messageSerivce] = useProvider([MessageService]);
       <el-button :icon="EmojiIcon" circle size="small" @click="$refs.emojiPicker.show()" />
     </div>
 
-    <bg-image class="message-user-photo" src="https://api.slingacademy.com/public/sample-users/6.png" />
+    <bg-image class="message-user-photo" :src="message.author.pictureUrl" />
 
     <div class="message-content">
-      <div class="message-title">
-        <small class="message-date"></small>
+      <div class="message-title">{{ message.author.username }}
+        <small class="message-date">{{ getDate() }}</small>
         <rich-text :text="message.text"></rich-text>
       </div>
 

@@ -28,6 +28,8 @@ export class MessageDataParser {
   }
 
   private replaceNewLines(text: RichText) {
+    console.log(text.tokens[0].value);
+    text.tokens[0].value.replace(/\n/g, '<>');
     return text; // TODO
   }
 

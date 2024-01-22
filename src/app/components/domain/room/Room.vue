@@ -10,6 +10,7 @@ import { MessageSocketService } from "@/modules/message/services/MessageSocketSe
 import { AuthenticationStore } from "@/modules/authentication/store/AuthenticationStore";
 import { ElNotification } from "element-plus";
 import type { Room } from "@/modules/room/models/domain/Room";
+import type { RichMessage } from "@/modules/message/models/domain";
 
 const props = defineProps<{ room: Room }>();
 const state = useState(MessageStore);
@@ -62,6 +63,7 @@ async function fetchMore() {
   try {
     loading.value = true;
     await messageSerivce.fetchMore(props.room.id);
+
     // TODO fetch more messages
   } catch (e) {
     console.error(e);
@@ -75,7 +77,8 @@ async function fetchMore() {
   <div class="room stretch-wh" ref="root">
     <div class="room-container" ref="container">
       <div ref="top">
-        <Message v-for="message, index in store.state.currentRoomMessages.reverse()" :message="message" :key="index">
+        <Message v-for="message, index in store.state.currentRoomMessages.slice().reverse()" :message="message"
+          :key="index">
         </Message>
       </div>
     </div>
