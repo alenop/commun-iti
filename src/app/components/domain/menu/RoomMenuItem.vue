@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import RoomSearchModal from "@/app/components/domain/room/RoomSearchModal.vue";
+import roomSearchModal from "@/app/components/domain/room/RoomSearchModal.vue";
 import { useProvider, useState } from "@/app/platform";
 import { RoomService } from "@/modules/room/services/RoomService";
 import { RoomStore } from "@/modules/room/store";
@@ -26,9 +26,9 @@ onMounted(() => {
       <div class="room-menu-name">{{ state.currentRoom?.name }}</div>
       <div class="room-menu-actions">
         <el-button @click="$refs.modal.show()" :icon="Plus" size="default" circle />
-        <el-button @click="$refs.modal.show()" :icon="Search" size="default" circle  />
-<roommodal ref="modal"></roommodal>
-<room-search-modal ref="modal2"></room-search-modal>
+        <el-button @click="$refs.modal2.show()" :icon="Search" size="default" circle />
+        <roommodal ref="modal"></roommodal>
+        <room-search-modal ref="modal2"></room-search-modal>
       </div>
     </div>
 
@@ -46,10 +46,12 @@ onMounted(() => {
     font-size: 70%;
     color: rgba(255, 255, 255, 0.7);
   }
+
   .room-menu-main {
     display: flex;
     justify-content: space-between;
     align-items: center;
+
     .room-menu-actions {
       display: flex;
       gap: map-get(var.$spaces, "2xs");

@@ -12,6 +12,8 @@ import { MessageStore } from "@/modules/message/store";
 import { RoomStore } from "@/modules/room/store";
 import { MessageAPI } from "@/modules/message/services/MessageAPI";
 import { RoomAPI } from "@/modules/room/services";
+import MessageReactions, { type MessageReaction } from "./MessageReactions.vue";
+import { type Message } from "@/modules/message/models/domain";
 
 async function getRich() {
   console.log("get Rich");
@@ -20,12 +22,11 @@ async function getRich() {
   if (store.state.currentRoom != null) {
     await messageSerivce.fetchMore(store.state.currentRoom.id);
     //return msgStore.state.currentRoomMessages;
-    const te = await apiService.fetch(store.state.currentRoom.id, { page: 1, perPage: 1 });
-    return te.data[te.data.length - 1].text
+    /* const te = await apiService.fetch(store.state.currentRoom.id, { page: 1, perPage: 1 });
+     return te.data[te.data.length - 1].text*/
     //return msgStore.state.currentRoomMessages[msgStore.state.currentRoomMessages.length-1];
   }
-} import MessageReactions, { type MessageReaction } from "./MessageReactions.vue";
-import { type Message } from "@/modules/message/models/domain";
+}
 
 const props = defineProps<{
   message: Message;
@@ -42,7 +43,7 @@ const [messageSerivce] = useProvider([MessageService]);
       <el-button :icon="EmojiIcon" circle size="small" @click="$refs.emojiPicker.show()" />
     </div>
 
-    <bg-image class="message-user-photo" src="" />
+    <bg-image class="message-user-photo" src="https://api.slingacademy.com/public/sample-users/6.png" />
 
     <div class="message-content">
       <div class="message-title">

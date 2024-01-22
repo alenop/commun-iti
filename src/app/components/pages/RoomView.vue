@@ -46,10 +46,11 @@ watch(
   display: flex;
   flex-direction: column;
 
-  > header {
+  >header {
     height: var.$layout-top-menu-height;
   }
-  > main {
+
+  >main {
     flex: 1;
     max-height: calc(100vh - (var.$layout-top-menu-height + var.$layout-footer-height));
     overflow-y: auto;

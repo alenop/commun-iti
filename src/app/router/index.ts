@@ -52,9 +52,9 @@ const router = createRouter({
       component: AppLayout,
       beforeEnter: (to, from) => {
         const authState = useState(AuthenticationStore);
-       
+
         if (!authState.loggedUser) {
-          
+
           return { path: "/login", query: { redirectPath: to.path }, hash: to.hash };
         }
 
@@ -68,7 +68,7 @@ const router = createRouter({
           beforeEnter: async (to: RouteLocationNormalized, from) => {
             const roomStore = useStore(RoomStore);
             const [roomApi] = useProvider([RoomAPI]);
-
+            console.log("maybe 2")
             if (roomStore.state.currentRoom?.id !== to.params.roomId) {
               const room = await roomApi.findById(to.params.roomId as string);
 

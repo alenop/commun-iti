@@ -9,9 +9,9 @@ const store = useStore(RoomStore);
 
 async function selectRoom(room: Room) {
   store.setCurrentRoom(room);
-  await router.push("/app/room/"+state.currentRoom);
+  await router.push("/app/room/" + room.id);
   const monStockage = localStorage;
-  monStockage.setItem("lastRoom",room.id);
+  monStockage.setItem("lastRoom", room.id);
 }
 
 </script>
@@ -20,7 +20,7 @@ async function selectRoom(room: Room) {
   <nav class="room-list">
     <ul>
       <li @click="selectRoom(a)" v-for=" a of store.state.rooms">
-        {{a.name}}
+        {{ a.name }}
       </li>
     </ul>
   </nav>
@@ -32,12 +32,13 @@ async function selectRoom(room: Room) {
 
 .room-list {
   padding-top: 1px;
-  > ul {
+
+  >ul {
     margin: 0;
     list-style-type: none;
     padding-inline: 0;
 
-    > li {
+    >li {
       margin: 0;
       text-decoration: none;
       display: block;
