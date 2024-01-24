@@ -19,7 +19,7 @@ async function selectRoom(room: Room) {
 <template>
   <nav class="room-list">
     <ul>
-      <li @click="selectRoom(a)" v-for=" a of store.state.rooms">
+      <li class="room-item" @click="selectRoom(a)" v-for=" a of store.state.rooms">
         {{ a.name }}
       </li>
     </ul>
@@ -60,5 +60,15 @@ async function selectRoom(room: Room) {
       }
     }
   }
+}
+
+.room-item {
+  color: white;
+  padding-left: 10px;
+  background-color: #ffffff11;
+}
+
+.room-item:hover {
+  background-color: #ffffff22;
 }
 </style>

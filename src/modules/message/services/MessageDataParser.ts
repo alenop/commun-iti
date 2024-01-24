@@ -26,11 +26,21 @@ export class MessageDataParser {
       attachements
     };
   }
-
   private replaceNewLines(text: RichText) {
-    console.log(text.tokens[0].value);
-    text.tokens[0].value.replace(/\n/g, '<>');
-    return text; // TODO
+    text.tokens.forEach((token, index, array) => {
+      console.log(token.type)
+      if (array[index + 1] && array[index + 1].type == "link") {
+        let df = token.value;
+        if (token.value == "") {
+          df = "default";
+        }
+        token.value = `<a href='${array[index + 1].value}'> ${df}</a>`
+        //array[index + 1].value = "";
+
+      }
+      token.value = token.value.replace(/\n/g, '<br>');
+    })
+    return text;
   }
 
   extractAttachements(text: RichText): MessageAttachement[] {

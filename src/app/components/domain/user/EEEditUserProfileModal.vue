@@ -80,8 +80,9 @@ async function onSubmit(form?: FormInstance) {
 
   try {
     isLoading.value = true;
-    await form.validate();
-    await userApi.update({username: formModel.value.username, picture: formModel.value.picture});
+
+    // TODO
+        
     hide();
   } catch (e) {
     return;

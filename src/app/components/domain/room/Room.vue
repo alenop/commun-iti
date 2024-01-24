@@ -50,9 +50,24 @@ watch(
     subscribeToIncomingMessage();
   }
 );
-
+function compare(a: RichMessage, b: RichMessage): boolean {
+  for (let i = 0; i < a.text.tokens.length; i++) {
+    if (a.text.tokens[i].value != b.text.tokens[i].value) {
+      return false
+    }
+  }
+  return true;
+}
 function subscribeToIncomingMessage() {
-  // TODO
+  messageSocket.onNewMessage(props.room.id, async (post) => {
+    if (post.author.id != authState.loggedUser?.id) {
+      //await messageSerivce.sendMessage(post);
+      const parsed = messageSerivce.parseMessage(post);
+      store.state.currentRoomMessages.unshift(parsed);
+      //state.currentRoomMessages = store.state.currentRoomMessages.slice().reverse();
+    }
+
+  });
 }
 
 async function fetchMore() {

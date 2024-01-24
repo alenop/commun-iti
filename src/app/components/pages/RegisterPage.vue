@@ -23,21 +23,21 @@ const registerFormRules = reactive<FormRules>({
     {
       required: true,
       message: "Pseudo obligatoire",
-      pattern:userNameRegex,
-      trigger:"blur"
+      pattern: userNameRegex,
+      trigger: "blur"
     }
   ],
   password: [{
-      required: true,
-      message: "Mdp obligatoire",
-      trigger:"blur"
-      
-    }],
+    required: true,
+    message: "Mdp obligatoire",
+    trigger: "blur"
+
+  }],
   passwordConfirmation: [{
-      required: true,
-      message: "Mdp confirm obligatoire",
-      trigger:"blur"
-    }]
+    required: true,
+    message: "Mdp confirm obligatoire",
+    trigger: "blur"
+  }]
 });
 
 async function onSubmit(form?: FormInstance) {
@@ -47,11 +47,12 @@ async function onSubmit(form?: FormInstance) {
 
   try {
     await form.validate();
-    if(registerModel.password != registerModel.passwordConfirmation){
+    if (registerModel.password != registerModel.passwordConfirmation) {
       ElMessage("failed you noted the wrong password in the second in the second input");
       throw new Error("failed bourrin");
     }
-    if(await userApi.exists(registerModel.username)){
+
+    if (await userApi.exists(registerModel.username)) {
       ElMessage("failed you already exists");
       throw new Error("failed you already exists");
     }
@@ -68,21 +69,15 @@ async function onSubmit(form?: FormInstance) {
       <h1 class="register-title">Créer un compte</h1>
 
       <div class="register-form">
-        <el-form
-          ref="form"
-          :model="registerModel"
-          :rules="registerFormRules"
-          label-position="top"
-          class="register-form"
-          @submit.prevent="onSubmit($refs.form)"
-        >
+        <el-form ref="form" :model="registerModel" :rules="registerFormRules" label-position="top" class="register-form"
+          @submit.prevent="onSubmit($refs.form)">
           <el-form-item label="Pseudo" prop="username">
             <el-input v-model="registerModel.username" />
           </el-form-item>
 
           <el-form-item label="Mot de passe" prop="password">
-            <el-input v-model="registerModel.password" type="password"/>
-             </el-form-item>
+            <el-input v-model="registerModel.password" type="password" />
+          </el-form-item>
 
           <el-form-item label="Confirmez votre mot de passe" prop="passwordConfirmation">
             <el-input v-model="registerModel.passwordConfirmation" type="password" />

@@ -27,7 +27,7 @@ export class AuthenticationService {
    */
   async authenticate(login: LoginModel): Promise<boolean> {
     const result = await this.api.login(login);
-    console.log(result);
+    console.log("result", result);
     if (!result) {
       return false;
     }

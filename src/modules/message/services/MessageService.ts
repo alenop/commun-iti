@@ -3,10 +3,11 @@ import { MessageAPI } from "./MessageAPI";
 import { MessageStore } from "../store";
 import { MessageDataParser } from "./MessageDataParser";
 import type { NewMessage } from "../models/NewMessage";
-import type { Message } from "../models/domain";
+import type { Message, RichMessage } from "../models/domain";
 import { AuthenticationStore } from "@/modules/authentication/store/AuthenticationStore";
 import { RoomStore } from "@/modules/room/store";
 import type { PaginatedQuery } from "@/modules/infrastructure/models";
+import type { MessageData } from "../models/MessageData";
 
 @injectable()
 export class MessageService {
@@ -15,14 +16,22 @@ export class MessageService {
   @inject(MessageDataParser) private readonly parser!: MessageDataParser;
   @inject(AuthenticationStore) private readonly authStore!: AuthenticationStore;
   @inject(RoomStore) private readonly roomStore!: RoomStore;
-  
+
   async sendMessage(newMessage: NewMessage) {
     const messageData = await this.api.sendMessage(newMessage);
-    const message = this.parser.parse(messageData);
+    const message: RichMessage = this.parser.parse(messageData);
 
     this.store.prependMessage(message);
   }
-
+  parseMessage(newMessage: RichMessage) {
+    return this.parser.parse({
+      ...newMessage, creationDate: newMessage.creationDate.toLocaleDateString('fr-FR', {
+        year: 'numeric',
+        month: 'long',
+        day: '2-digit',
+      })
+    });
+  }
   async reactTo(emoji: string, message: Message) {
     const success = await this.api.reactTo({
       emoji,

@@ -1,8 +1,10 @@
 <script lang="ts" setup>
-import  Quill from "quill";
+import Quill from "quill";
 import { ref, onMounted } from "vue";
 import type { DeltaOperation } from "quill";
 import type { RichText, RichTextToken } from "@/modules/message/models/domain";
+import { cp } from "fs";
+import { isConstructorDeclaration } from "typescript";
 
 const ENTER_KEY_CODE = 13;
 
@@ -18,11 +20,29 @@ const mentionRegex = /@(\w+)/gi;
 
 const editorElement = ref<HTMLDivElement | null>(null);
 
+function getLink(op: DeltaOperation) {
+  const result: RichTextToken[] = [];
+  result.push({
+    type: "rich" as const,
+    value: op.insert
+  },
+    {
+      type: "link",
+      value: op.attributes?.link
+    })
+  return result;
+}
 function parseQuillMessage(delta: { ops: DeltaOperation[] }): RichText | null {
   const richText = {
     tokens: delta.ops
       .map((op) => {
-        const result = parseText(httpRegex, op.insert, "link");
+        let result;
+        if (op.attributes && op.attributes.link) {
+          result = getLink(op);
+        } else {
+          result = parseText(httpRegex, op.insert, "link");
+        }
+
         if (result.length > 0) {
           return result;
         }
@@ -83,7 +103,6 @@ function parseText<T extends "link" | "mention">(regexp: RegExp, text: string, t
   while (match) {
     const startIdx = prevMatch ? prevMatch.index + prevMatch[0].length : 0;
     const beforeText = text.substring(startIdx, match.index);
-
     const value = match[0];
 
     result.push(
@@ -102,7 +121,6 @@ function parseText<T extends "link" | "mention">(regexp: RegExp, text: string, t
 
     if (!match) {
       const afterText = text.substring(prevMatch.index + value.length);
-
       result.push({
         type: "rich" as const,
         value: afterText

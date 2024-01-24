@@ -11,7 +11,8 @@ export class HttpUserAPI extends UserAPI {
   }
 
   async register(user: UserRegistrationModel): Promise<User> {
-    const resonse = await this.http.post("/user", user);
+    console.log("user", user);
+    const resonse = await this.http.post("/user", { password: user.password, username: user.username });
     return resonse.data;
   }
 

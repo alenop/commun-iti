@@ -7,13 +7,12 @@ import RichTextEditorVue from "../../ui/RichTextEditor.vue";
 
 const state = useState(RoomStore);
 
-function test(a:RichText){
+function test(text: RichText) {
 
-  if(state.currentRoom!=null){
-
-    messageService.sendMessage({text:a,roomId:state.currentRoom.id});
+  if (state.currentRoom != null) {
+    messageService.sendMessage({ text: text, roomId: state.currentRoom.id });
   }
-  
+
 }
 
 const [messageService] = useProvider([MessageService]);
